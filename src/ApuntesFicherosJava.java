@@ -1,7 +1,6 @@
 
 public class ApuntesFicherosJava {
 
-    public static void main(String[] args) {
         //    // TODO code application logic here
 
         //funciones ficheros java
@@ -88,4 +87,4 @@ public class ApuntesFicherosJava {
     }
 
 
-}
+

@@ -1,66 +1,81 @@
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
+import java.io.*;
 public class FicheroBinario {
+    public static void main(String[] args) throws IOException {
+        System.out.println("Vamos a crear un fichero");
+        String nomArchivo = "textito.txt";
+        File f = new File(nomArchivo);
 
-    public static void main (String [] args) throws IOException, FileNotFoundException  {
-
-
-        //Ponemos la ruta del fichero binario
-        File f = new File ("binario2.bin");
-
-        //Creamos un objeto para escribir en el fichero en modo falso para borrar
-        ObjectOutputStream fO = null;
-
-        if (f.exists())
-            fO = new MiObjectBinario(new FileOutputStream(f,false));
-
-        else
-            fO = new ObjectOutputStream (new FileOutputStream (f));
-
-        Persona p1 = new Persona("Javier",23);
-        Persona p2 = new Persona("Juan",24);
-
-        fO.writeObject(p1);
-        fO.writeObject("Segundo");
-        fO.writeObject(p2);
-
-        fO.close();
-
-        //Creamos un objeto para leer el fichero que se tiene que inicializar a null primero
-
-        //mostrar por pantalla
+        System.out.println("El nombre del archivo es: " + f.getName());
+        FileWriter fw = new FileWriter(f);
+        fw.write("Pito");
+        fw.write('T');
+        fw.append(" ME GUSTAN LOS TRENES");
+        fw.write(" A MI TAMBIÉN MAMAHUEVASO".toCharArray());
 
 
-        ObjectInputStream fI = null;
-
-        try {
-
-            fI = new ObjectInputStream (new FileInputStream(f));
-
-            do {
-                System.out.println(fI.readObject());
-            }while (true);
-
-        }catch(EOFException e) {
-            System.out.println("Final de fichero");
 
 
-        }catch(Exception e) {
-            System.out.println(e.getMessage());
-        };
+        FileReader fr = new FileReader(f);
+        int car = fr.read();
+        while(!(car == -1)){
+            if(!(car == 32))
+                System.out.print((((char)car)));
+            else
+                System.out.print(" ");
+            car = fr.read();
+        }
 
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.newLine();
+        bw.write("PAPO PEPO");
+        bw.write(" PARA PE PAPO PEPO".toCharArray());
+        bw.close();
+        BufferedReader br = new BufferedReader(fr);
+        car = br.read();
+        while(!(car == -1)){
+            if(!(car == 32))
+                System.out.print((char)car);
+            else
+                System.out.print(" ");
+            car = br.read();
+        }
 
-        fI.close();
-
+        main2();
     }
 
+    public static void main2() throws IOException {
+        System.out.println();
+        String nomArchivo = "textitoBinario.bin";
+        File f = new File(nomArchivo);
+
+        ObjectOutputStream fo;
+        if(f.exists())
+            fo = new MiObjectBinario(new FileOutputStream(f, true));
+        else
+            fo = new ObjectOutputStream(new FileOutputStream(f));
+
+        fo.writeObject("Primero");
+        fo.writeObject("Segundo");
+        Persona p1 = new Persona("Pepito", 20);
+        fo.writeObject(p1);
+        fo.writeObject(new Persona("Pepita", 21));
+        fo.close();
 
 
+        ObjectInputStream fi = null;
+        try{
+            fi = new ObjectInputStream(new FileInputStream(f));
+            do{
+                System.out.println(fi.readObject());
+            }while(true);
+        } catch(EOFException e){
+            System.out.println("Final de fichero");
+        } catch (Exception e){
+            System.out.println(e);
+        }
+
+        fi.close();
+    }
 }
+
